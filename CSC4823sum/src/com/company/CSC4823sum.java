@@ -31,60 +31,91 @@ public class CSC4823sum {
         total = after - before;
         System.out.printf("Total time : %f\n",total);
     }
-    public static void Bruteforce(int sum, int[] list){
+    public static void Bruteforce(int sum, int[] mylist){
+        mylist = sort(mylist);
+        int[] list = removeDuplicates(mylist,mylist.length);
         int length = list.length;
         int[][][] found = new int[length][length][length];
-        for(int i = 0; i < list.length-2; i++){
-            for(int j = i+1; j < list.length-1; j++){
-                for(int k = j+1; k < list.length; k++){
-                    if(list[i] + list[j] + list[k] == 0 && found[i][j][k] != 1){
-                        System.out.println("Triplet is " + list[i] + ", " + list[j] + ", "+ list[k]);
-                        found[i][j][k] = 1;
-                        found[i][k][j] = 1;
-                        found[j][k][i] = 1;
-                        found[j][i][k] = 1;
-                        found[k][j][i] = 1;
-                        found[k][i][j] = 1;
-                    }
-                }
-            }
-        }
-    }
-    public static void Faster(int sum, int[] list){
-        int length = list.length;
-        int[][][] found = new int[length][length][length];
+        int count = 0;
 
-        for(int i = 0; i < list.length-2; i++){
-            for(int j = i+1; j < list.length/2; j++){
-                for (int k = list.length/2; k < list.length; k++) {
-                    if (list[i] + list[j] + list[k] == 0 && found[i][j][k] != 1) {
-                        System.out.println("Triplet is " + list[i] + ", " + list[j] + ", " + list[k]);
+        for(int i = 0; i < list.length; i++){
+            for(int j = 0; j < list.length; j++){
+                for(int k = 0; k < list.length; k++){
+                    if(list[i] + list[j] + list[k] == 0 && found[i][j][k] != 1 && (i != j && j != k && k != i)){
+                        //System.out.println("Triplet is " + list[i] + ", " + list[j] + ", "+ list[k]);
                         found[i][j][k] = 1;
                         found[i][k][j] = 1;
                         found[j][k][i] = 1;
                         found[j][i][k] = 1;
                         found[k][j][i] = 1;
                         found[k][i][j] = 1;
+                        count++;
                     }
                 }
             }
         }
+        System.out.println(count);
     }
-    public static void Fastest(int sum,int[] list){
-        //sort list
-        list = sort(list);
-        int[] newList = removeDuplicates(list,list.length);
-        int k;
-        //two loops
-        for(int i = 0; i < newList.length-1; i++){
-            for(int j = 0; j < newList.length; j++){
-                int val = (newList[i] + newList[j])*(-1);
-                k = binarySearch(newList,val);
-                if(k != -1 && newList[i] + newList[j] + newList[k] == 0){
-                    System.out.println("Triplet is " + newList[i] + ", " + newList[j] + ", " + newList[k]);
+    public static void Faster(int sum, int[] mylist){
+        mylist = sort(mylist);
+        int[] list = removeDuplicates(mylist,mylist.length);
+        int length = list.length;
+        int[][][] found = new int[length][length][length];
+        int count = 0;
+        int zero = 0;
+        for(int i = 0; i < length; i++){
+            if(list[i] == 0 || (list[i] > 0 && list[i-1] < 0)){
+                zero = i;
+            }
+        }
+        for(int i = 0; i < zero; i++){
+            for(int j = 0; j < length; j++){
+                for(int k = 0; k < length; k++){
+                    if(list[i] + list[j] + list[k] == 0 && found[i][j][k] != 1 && (i != j && j != k && k != i)){
+                        //System.out.println("Triplet is " + list[i] + ", " + list[j] + ", "+ list[k]);
+                        found[i][j][k] = 1;
+                        found[i][k][j] = 1;
+                        found[j][k][i] = 1;
+                        found[j][i][k] = 1;
+                        found[k][j][i] = 1;
+                        found[k][i][j] = 1;
+                        count++;
+                    }
                 }
             }
         }
+        System.out.println(count);
+    }
+    public static void Fastest(int sum,int[] mylist){
+        mylist = sort(mylist);
+        int[] list = removeDuplicates(mylist,mylist.length);
+        int length = list.length;
+        int[][][] found = new int[length][length][length];
+        int count = 0;
+        int zero = 0;
+        for(int i = 0; i < length; i++){
+            if(list[i] == 0 || (list[i] > 0 && list[i-1] < 0)){
+                zero = i;
+            }
+        }
+        for(int i = 0; i < zero; i++){
+            for(int j = zero; j < length; j++){
+                for(int k = 0; k < length; k++){
+                    if(list[i] + list[j] + list[k] == 0 && found[i][j][k] != 1 && (i != j && j != k && k != i)){
+                        //System.out.println("Triplet is " + list[i] + ", " + list[j] + ", "+ list[k]);
+                        found[i][j][k] = 1;
+                        found[i][k][j] = 1;
+                        found[j][k][i] = 1;
+                        found[j][i][k] = 1;
+                        found[k][j][i] = 1;
+                        found[k][i][j] = 1;
+                        count++;
+                    }
+                }
+            }
+        }
+        System.out.println(count);
+
     }
     public static int[] removeDuplicates(int[] list, int length){
         int[] temp = new int[length];
@@ -105,9 +136,13 @@ public class CSC4823sum {
     public static int binarySearch(int[] list, int val){
         int length = list.length;
         int l = 0, r = length-1;
-
+        if (list[length-1] < val){
+            return -1;
+        }else if(list[0] > val){
+            return -1;
+        }
         while(l<=r){
-            int m = l + (r-1)/2;
+            int m = (l+r)/2;
 
             if (list[m] == val){
                 return m;
