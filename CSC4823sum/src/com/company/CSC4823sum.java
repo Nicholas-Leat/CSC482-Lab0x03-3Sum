@@ -12,24 +12,7 @@ public class CSC4823sum {
 
 
     public static void main(String[] args) throws FileNotFoundException{
-        int sum = 0;
-        int N = 20;
-        int[] myList = Generatelist(-10,10,N);
-        double before = getCpuTime();
-        Bruteforce(sum, myList);
-        double after = getCpuTime();
-        double total = after - before;
-        System.out.printf("Total time : %f\n",total);
-        before = getCpuTime();
-        Faster(sum,myList);
-        after = getCpuTime();
-        total = after - before;
-        System.out.printf("Total time : %f\n",total);
-        before = getCpuTime();
-        Fastest(sum, myList);
-        after = getCpuTime();
-        total = after - before;
-        System.out.printf("Total time : %f\n",total);
+        threeSumTest();
     }
     public static void Bruteforce(int sum, int[] mylist){
         mylist = sort(mylist);
@@ -54,7 +37,7 @@ public class CSC4823sum {
                 }
             }
         }
-        System.out.println(count);
+        //System.out.println(count);
     }
     public static void Faster(int sum, int[] mylist){
         mylist = sort(mylist);
@@ -84,7 +67,7 @@ public class CSC4823sum {
                 }
             }
         }
-        System.out.println(count);
+        //System.out.println(count);
     }
     public static void Fastest(int sum,int[] mylist){
         mylist = sort(mylist);
@@ -114,7 +97,7 @@ public class CSC4823sum {
                 }
             }
         }
-        System.out.println(count);
+        //System.out.println(count);
 
     }
     public static int[] removeDuplicates(int[] list, int length){
@@ -182,6 +165,77 @@ public class CSC4823sum {
             list[i] = temp;
         }
         return list;
+    }
+    public static void threeSumTest(){
+        int[] N = new int[1000];
+        int Nval = 4;
+        double maxT = 1000000;
+        int iter = 0;
+        //brute force algorithm
+        double[] bruteTime = new double[1000];
+        double[] bruteDR = new double[1000];
+        double[] bruteEDR = new double[1000];
+        //Faster 3sum algorithm
+        double[] fasterTime = new double[1000];
+        double[] fasterDR = new double[1000];
+        double[] fasterEDR = new double[1000];
+        //Fastest 3sum algorithm
+        double[] fastestTime = new double[1000];
+        double[] fastestDR = new double[1000];
+        double[] fastestEDR = new double[1000];
+        //time control
+        double timeBefore;
+        double timeAfter;
+        double totalTime = 0;
+        System.out.println("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+        System.out.format("%100s %100s %100s\n","Brute 3sum", "Faster 3sum", "Fastest 3sum");
+        /*
+        while(totalTime < maxT){
+            System.out.printf("Generating list of length %d\n",Nval);
+            int[] list = Generatelist(-100,100,Nval);
+            N[iter] = Nval;
+
+            //System.out.println("Fastest 3sum");
+            timeBefore = getCpuTime();
+            Fastest(0,list);
+            timeAfter = getCpuTime();
+            totalTime = timeAfter - timeBefore;
+            fastestTime[iter] = totalTime;
+
+            //System.out.println("Faster 3sum");
+            timeBefore = getCpuTime();
+            Faster(0,list);
+            timeAfter = getCpuTime();
+            totalTime = timeAfter - timeBefore;
+            fasterTime[iter] = totalTime;
+
+
+            //Brute 3sum
+            //System.out.println("Brute 3sum");
+            timeBefore = getCpuTime();
+            Bruteforce(0,list);
+            timeAfter = getCpuTime();
+            totalTime = timeAfter - timeBefore;
+            bruteTime[iter] =  totalTime;
+
+            if(iter != 0){
+                bruteDR[iter] = (bruteTime[iter]/bruteTime[iter-1]);
+                fasterDR[iter] = (fasterTime[iter]/fasterTime[iter-1]);
+                fastestDR[iter] = (fastestTime[iter]/fastestTime[iter-1]);
+                //expected Doubling Ratios
+
+            }else{
+                bruteDR[0] = 0;
+                fasterDR[0] = 0;
+                fastestDR[0] = 0;
+            }
+
+            //Update values
+            iter++;
+            Nval = Nval * 2;
+
+        }/**/
+
     }
     public static long getCpuTime( ) {
 
