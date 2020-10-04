@@ -116,28 +116,6 @@ public class CSC4823sum {
 
         return returnArr;
     }
-    public static int binarySearch(int[] list, int val){
-        int length = list.length;
-        int l = 0, r = length-1;
-        if (list[length-1] < val){
-            return -1;
-        }else if(list[0] > val){
-            return -1;
-        }
-        while(l<=r){
-            int m = (l+r)/2;
-
-            if (list[m] == val){
-                return m;
-            }
-            if(list[m] < val){
-                l = m + 1;
-            }else{
-                r = m -1;
-            }
-        }
-        return -1;
-    }
     public static int[] Generatelist(int min, int max, int length){
         int[] list = new int[length];
         Random r = new Random();
@@ -169,7 +147,7 @@ public class CSC4823sum {
     public static void threeSumTest(){
         int[] N = new int[1000];
         int Nval = 4;
-        double maxT = 1000000;
+        double maxN = 10000000;
         int iter = 0;
         //brute force algorithm
         double[] bruteTime = new double[1000];
@@ -187,11 +165,12 @@ public class CSC4823sum {
         double timeBefore;
         double timeAfter;
         double totalTime = 0;
-        System.out.println("-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
-        System.out.format("%100s %100s %100s\n","Brute 3sum", "Faster 3sum", "Fastest 3sum");
-        /*
-        while(totalTime < maxT){
-            System.out.printf("Generating list of length %d\n",Nval);
+        System.out.println("-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+        System.out.format("%-100s %-100s %-100s\n","Brute 3sum", "Faster 3sum", "Fastest 3sum");
+        System.out.format("%-10s %-30s %-30s %-27s %-30s %-30s %-38s %-30s %-30s %-30s\n", "N", "Time", "Doubling Ratios", "Expected Doubling Ratios", "Time", "Doubling Ratios", "Expected Doubling Ratios", "Time", "Doubling Ratios", "Expected Doubling Ratios");
+
+        while(Nval < maxN){
+            //System.out.printf("Generating list of length %d\n",Nval);
             int[] list = Generatelist(-100,100,Nval);
             N[iter] = Nval;
 
@@ -223,17 +202,28 @@ public class CSC4823sum {
                 fasterDR[iter] = (fasterTime[iter]/fasterTime[iter-1]);
                 fastestDR[iter] = (fastestTime[iter]/fastestTime[iter-1]);
                 //expected Doubling Ratios
+                bruteEDR[iter] = ((double)Nval * (double)Nval * (double)Nval)/((double)N[iter-1] * (double)N[iter-1] *(double) N[iter-1]);
+                fasterEDR[iter] = (((double)Nval * (double)Nval) * Math.log(Nval))/(((double)N[iter-1] * (double)N[iter-1]) *Math.log(N[iter-1]));
+                fastestEDR[iter] = ((double)Nval * (double)Nval)/((double)N[iter-1] * (double)N[iter-1]);
 
             }else{
                 bruteDR[0] = 0;
                 fasterDR[0] = 0;
                 fastestDR[0] = 0;
+                bruteEDR[0] = 0;
+                fasterEDR[0] = 0;
+                fastestEDR[0] =0;
             }
+
+            //print Values
+            System.out.format("%-10d %-30f %-30f %-27f %-30f %-30f %-38f %-30f %-30f %-30f\n",Nval, bruteTime[iter], bruteDR[iter], bruteEDR[iter], fasterTime[iter], fasterDR[iter], fasterEDR[iter], fastestTime[iter], fastestDR[iter], fastestEDR[iter]);
 
             //Update values
             iter++;
             Nval = Nval * 2;
-
+            bruteEDR[0] = 1;
+            fasterEDR[0] = 1;
+            fastestEDR[0] =1;
         }/**/
 
     }
